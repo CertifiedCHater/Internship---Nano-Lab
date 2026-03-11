@@ -18,7 +18,7 @@ except ImportError:
 OUTPUT_DIR = r"C:\SLM_capture"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-NUM_IMAGES = 1000
+NUM_IMAGES = 255
 
 # Initialize SLM
 slm = slmdisplaysdk.SLMDisplay()
@@ -105,4 +105,5 @@ if cams:
     cams.Clear()
 
 if system:
+
     system.ReleaseInstance()
