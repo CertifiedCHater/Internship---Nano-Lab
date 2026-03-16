@@ -5,7 +5,7 @@ import numpy as np
 import cv2
 
 
-def center_pattern_sml(pattern, width=1920, height=1200):
+def center_pattern_slm(pattern, width=1920, height=1200):
 
     n = pattern.shape[0]
 
@@ -104,7 +104,7 @@ if USE_CAMERA:
     for gray_val in range(5):
         coarse = np.random.randint(0, 256, (1920, 1200), dtype=np.uint8)
         active = cv2.resize(coarse, (1920, 1200), interpolation=cv2.INTER_NEAREST).astype(np.uint8)
-        pattern = center_pattern_sml(active)
+        pattern = center_pattern_slm(active)
 
         err, dataHandle = slm.loadImageData(pattern)
         assert err == HEDSERR_NoError, HEDS.SDK.ErrorString(err)
