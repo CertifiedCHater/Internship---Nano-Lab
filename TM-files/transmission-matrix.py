@@ -9,7 +9,6 @@ from scipy.linalg import hadamard
 
 sys.path.append(r"C:\Program Files\HOLOEYE Photonics\SLM Display SDK (Python) v4.0.0\examples")
 
-
 # =============================================================================
 # SECTION A: HADAMARD PATTERN GENERATION
 # =============================================================================
@@ -49,6 +48,14 @@ def generate_hadamard_patterns(n_segments):
 
 def hadamard_to_slm_image(pattern_1d, grid_n, slm_width, slm_height,
                            static_col_split, global_phase_offset=0.0):
+    
+    pattern_1d = np.array(pattern_1d, dtype=int)
+    grid_n = int(np.sqrt(len(pattern_1d)))
+    slm_height = 1920
+    slm_width = 1080    
+    static_col_split = slm_width // 2
+    global_phase_offset = (0, np.pi / 2, np.pi, 3 * np.pi / 2)[0]  # default to 0 if not provided
+
     """
     Convert a flat Hadamard pattern (+1/-1) into a full SLM grayscale image.
 
@@ -63,6 +70,7 @@ def hadamard_to_slm_image(pattern_1d, grid_n, slm_width, slm_height,
     slm_width           : SLM width in pixels
     slm_height          : SLM height in pixels
     static_col_split    : x-pixel column where the static/modulated split occurs
+                          (in Jonas's setup this is roughly slm_width // 2)
     global_phase_offset : extra phase added to entire modulated region
                           use 0, π/2, π, 3π/2 for the 4-step measurement
 
@@ -74,6 +82,7 @@ def hadamard_to_slm_image(pattern_1d, grid_n, slm_width, slm_height,
 
     mod_width  = slm_width - static_col_split
     mod_height = slm_height
+
     seg_w = mod_width  // grid_n
     seg_h = mod_height // grid_n
 
@@ -141,6 +150,8 @@ def capture_tm_images(H, slm, camera, output_dir,
                            described in report section 7.1.2 — first 10 frames
                            are duplicates)
     """
+
+    output_dir = os.path.join(output_dir)
 
     try:
         import HEDS
