@@ -70,7 +70,7 @@ def hadamard_to_slm_image(pattern_1d, grid_n, slm_width, slm_height,
     slm_width           : SLM width in pixels
     slm_height          : SLM height in pixels
     static_col_split    : x-pixel column where the static/modulated split occurs
-                          (in Jonas's setup this is roughly slm_width // 2)
+                          
     global_phase_offset : extra phase added to entire modulated region
                           use 0, π/2, π, 3π/2 for the 4-step measurement
 
