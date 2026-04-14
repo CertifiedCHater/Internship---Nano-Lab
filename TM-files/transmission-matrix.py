@@ -1,9 +1,42 @@
+"""
+=============================================================================
+TRANSMISSION MATRIX (TM) FUNCTIONS
+=============================================================================
+Portable functions for measuring and reconstructing the transmission matrix
+of a scattering medium (PUF) using a phase-only SLM and CMOS camera.
+
+Based on the method described in:
+  - Popoff et al. (2011), New Journal of Physics
+  - Goorden et al. (2014), Optica
+
+HOW TO USE:
+-----------
+Step 1 — Generate Hadamard patterns:
+    H = generate_hadamard_patterns(N_SEGMENTS)
+
+Step 2 — Capture images (run with SLM + camera connected):
+    capture_tm_images(H, slm, camera, output_dir)
+
+Step 3 — Reconstruct TM from saved images:
+    TM = reconstruct_tm(output_dir, N_SEGMENTS)
+
+Step 4 — Compute focusing pattern for a target pixel:
+    slm_image = compute_focus_pattern(TM, target_row, target_col, ...)
+
+All path/config parameters are passed as arguments — nothing is hardcoded.
+=============================================================================
+"""
+
 import os
 import time
+import sys
 import numpy as np
 from PIL import Image
 from scipy import signal
 from scipy.linalg import hadamard
+
+
+sys.path.append(r"C:\Program Files\HOLOEYE Photonics\SLM Display SDK (Python) v4.0.0\examples")
 
 
 # =============================================================================
@@ -138,7 +171,20 @@ def capture_tm_images(H, slm, camera, output_dir,
                            described in report section 7.1.2 — first 10 frames
                            are duplicates)
     """
-    from hedslib.heds_types import HEDSERR_NoError
+
+    try:
+        import HEDS
+        from hedslib.heds_types import HEDSERR_NoError
+        err = HEDS.SDK.Init(4, 0)
+
+        assert err == HEDSERR_NoError
+        slm = HEDS.SLM.Init()
+        assert slm.errorCode() == HEDSERR_NoError
+        print("  SLM initialized.")
+
+    except Exception as e:
+        print(f"  Could not initialize SLM: {e}")
+        return
 
     if phase_steps is None:
         phase_steps = [0, np.pi / 2, np.pi, 3 * np.pi / 2]
