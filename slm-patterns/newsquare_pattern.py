@@ -17,7 +17,7 @@ OUTPUT_DIR    = r"C:\path\to\save\captures"   # laptop new file
 CALIB_DIR     = OUTPUT_DIR                     # same folder for calibration check
  
 # --- SLM hardware settings ---
-SLM_WIDTH     = 1920
+SLM_WIDTH     = 1200
 SLM_HEIGHT    = 1200
  
 # --- Rectangle (Shift region) on SLM image ---
