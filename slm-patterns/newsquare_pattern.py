@@ -13,7 +13,7 @@ from scipy.stats import norm
 # =============================================================================
  
 # --- Paths ---
-OUTPUT_DIR    = r"C:\path\to\save\captures"   # where to save BMP images
+OUTPUT_DIR    = r"C:\path\to\save\captures"   # laptop new file
 CALIB_DIR     = OUTPUT_DIR                     # same folder for calibration check
  
 # --- SLM hardware settings ---
