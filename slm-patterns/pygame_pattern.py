@@ -67,6 +67,8 @@ def display_grayscale_patch():
         #    rect_y + rect_height // 2
         #))
         #screen.blit(text_surface, text_rect)
+
+        
  
         pygame.display.flip()
         clock.tick(60)
