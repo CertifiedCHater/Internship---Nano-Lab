@@ -7,7 +7,7 @@ def display_grayscale_patch():
     pygame.init()
     num_displays = pygame.display.get_num_displays()
     display_sizes = pygame.display.get_desktop_sizes()
-    print("monitor size: ", display_size)
+    print("monitor size: ", display_sizes)
     print("num display: ", num_displays)
     monitor_index = 1 if num_displays > 1 else 0
     screen_size = display_sizes[monitor_index]
@@ -27,13 +27,13 @@ def display_grayscale_patch():
     last_update = time.time()
  
     # Rectangle size (smaller box)
-    rect_width = 400
-    rect_height = 400
+    rect_width = 300
+    rect_height = 300
  
     # Position: slightly right of center
-    rect_x = 960 - 50
+    rect_x = 1000
     print(rect_x)
-    rect_y = 600 - 50
+    rect_y = 600
     print(rect_y)
  
     while running:
@@ -45,7 +45,7 @@ def display_grayscale_patch():
  
         # Update every second
         if current_time - last_update >= 1:
-            gray_value += 20
+            gray_value += 1
             if gray_value > 255:
                 gray_value = 0
             last_update = current_time
@@ -60,14 +60,6 @@ def display_grayscale_patch():
             (rect_x, rect_y, rect_width, rect_height)
         )
  
-        # Optional: display value inside rectangle
-        #text_surface = font.render(f"{gray_value}", True, (255 - gray_value, 0, 0))
-        #text_rect = text_surface.get_rect(center=(
-        #    rect_x + rect_width // 2,
-        #    rect_y + rect_height // 2
-        #))
-        #screen.blit(text_surface, text_rect)
-
         
  
         pygame.display.flip()
