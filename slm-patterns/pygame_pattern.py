@@ -14,8 +14,6 @@ def display_grayscale_patch():
     monitor_x = sum(display_sizes[i][0] for i in range(monitor_index)) if monitor_index > 0 else 0
     monitor_y = 0
 
-    
- 
     os.environ["SDL_VIDEO_WINDOW_POS"] = f"{monitor_x},{monitor_y}"
  
     screen = pygame.display.set_mode(screen_size, pygame.NOFRAME)
