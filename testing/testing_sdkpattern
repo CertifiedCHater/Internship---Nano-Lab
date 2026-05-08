@@ -1,0 +1,431 @@
+import PySpin.PySpin
+import sys
+import numpy as np
+from PIL import Image, ImageDraw
+import time
+import os
+try:
+   import PySpin
+   USE_CAMERA = True
+   print("PySpin found.")
+except ImportError:
+   print("PySpin not found; running without camera.")
+   USE_CAMERA = False
+
+
+# --- Holoeye SDK path ---
+HOLOEYE_SDK_PATH = r"C:\Program Files\HOLOEYE Photonics\SLM Display SDK (Python) v4.0.0\examples"
+sys.path.append(HOLOEYE_SDK_PATH)
+
+import HEDS
+from hedslib.heds_types import HEDSERR_NoError
+
+OUTPUT_DIR = r"C:\Users\mu00129\Desktop\slmnew10\capturesCameraSquareNew3"
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+
+system = cams = camera = None
+if USE_CAMERA:
+       system = PySpin.System.GetInstance()
+       cams = system.GetCameras()
+
+       if cams.GetSize() > 0:
+           camera = cams.GetByIndex(0)
+           camera.Init()
+
+           nodemap = camera.GetNodeMap()
+
+           exp_auto = PySpin.CEnumerationPtr(nodemap.GetNode("ExposureAuto"))
+           exp_auto.SetIntValue(exp_auto.GetEntryByName("Off").GetValue())
+           exp_time=PySpin.PySpin.CFloatPtr(nodemap.GetNode("ExposureTime"))
+           exp_time.SetValue(85.0)
+           acq = PySpin.CEnumerationPtr(nodemap.GetNode("AcquisitionMode"))
+           ac_cont = acq.GetEntryByName("SingleFrame")
+           camera.BeginAcquisition()
+
+           print("Camera initialized.")
+
+       else:
+           print("No camera detected.")
+           USE_CAMERA = False
+
+def display_grayscale_patch():
+
+        # --- Init SDK and SLM ---
+        err = HEDS.SDK.Init(4, 0)
+        assert err == HEDSERR_NoError, f"SDK init failed: {err}"
+
+        slm = HEDS.SLM.Init()
+        assert slm.errorCode() == HEDSERR_NoError, f"SLM init failed: {slm.errorCode()}"
+
+        # Auto-detect SLM resolution (same as pygame reading the monitor size)
+        slm_width = slm.width_px()
+        slm_height = slm.height_px()
+        print(f"SLM size: {slm_width} x {slm_height}")
+
+        # --- Square settings (same as your pygame version) ---
+        rect_width = 300
+        rect_height = 300
+
+        # Position: slightly right of center (matching your rect_x=1000, rect_y=600)
+        rect_x = 1000
+        rect_y = 600
+        print(f"rect_x: {rect_x}")
+        print(f"rect_y: {rect_y}")
+
+        gray_value = 0
+        last_update = time.time()
+
+        print("Running — press Ctrl+C to stop")
+
+        try:
+            while True:
+                current_time = time.time()
+
+                # Update every second (same timing as your pygame version)
+                if current_time - last_update >= 1:
+                    gray_value += 1
+                    if gray_value > 255:
+                        gray_value = 0
+                    last_update = current_time
+                    print(f"  gray value: {gray_value}")
+
+                # Build SLM image — black background, square at gray_value
+                img = np.zeros((slm_height, slm_width), dtype=np.uint8)
+                img[rect_y: rect_y + rect_height,
+                rect_x: rect_x + rect_width] = gray_value
+
+                # Send to SLM
+                err, handle = slm.loadImageData(img)
+                assert err == HEDSERR_NoError, f"Load error: {err}"
+                err = handle.show()
+                assert err == HEDSERR_NoError, f"Show error: {err}"
+
+                time.sleep(1 / 60)  # ~60 fps, same as clock.tick(60)
+
+        except KeyboardInterrupt:
+            print("\nStopped.")
+
+        finally:
+            slm.close()
+            HEDS.SDK.Close()
+
+
+# Run
+display_grayscale_patch()
+
+
+
+
+
+
+C:\Users\mu00129\AppData\Local\Programs\Python\Python310\python.exe C:\Users\mu00129\Desktop\slmnew10\testing_square_pattern.py 
+PySpin found.
+Camera initialized.
+SLM size: 1920 x 1200
+rect_x: 1000
+rect_y: 600
+Running — press Ctrl+C to stop
+  gray value: 1
+  gray value: 2
+  gray value: 3
+  gray value: 4
+  gray value: 5
+  gray value: 6
+  gray value: 7
+  gray value: 8
+  gray value: 9
+  gray value: 10
+  gray value: 11
+  gray value: 12
+  gray value: 13
+  gray value: 14
+  gray value: 15
+  gray value: 16
+  gray value: 17
+  gray value: 18
+  gray value: 19
+  gray value: 20
+  gray value: 21
+  gray value: 22
+  gray value: 23
+  gray value: 24
+  gray value: 25
+  gray value: 26
+  gray value: 27
+  gray value: 28
+  gray value: 29
+  gray value: 30
+  gray value: 31
+  gray value: 32
+  gray value: 33
+  gray value: 34
+  gray value: 35
+  gray value: 36
+  gray value: 37
+  gray value: 38
+  gray value: 39
+  gray value: 40
+  gray value: 41
+  gray value: 42
+  gray value: 43
+  gray value: 44
+  gray value: 45
+  gray value: 46
+  gray value: 47
+  gray value: 48
+  gray value: 49
+  gray value: 50
+  gray value: 51
+  gray value: 52
+  gray value: 53
+  gray value: 54
+  gray value: 55
+  gray value: 56
+  gray value: 57
+  gray value: 58
+  gray value: 59
+  gray value: 60
+  gray value: 61
+  gray value: 62
+  gray value: 63
+  gray value: 64
+  gray value: 65
+  gray value: 66
+  gray value: 67
+  gray value: 68
+  gray value: 69
+  gray value: 70
+  gray value: 71
+  gray value: 72
+  gray value: 73
+  gray value: 74
+  gray value: 75
+  gray value: 76
+  gray value: 77
+  gray value: 78
+  gray value: 79
+  gray value: 80
+  gray value: 81
+  gray value: 82
+  gray value: 83
+  gray value: 84
+  gray value: 85
+  gray value: 86
+  gray value: 87
+  gray value: 88
+  gray value: 89
+  gray value: 90
+  gray value: 91
+  gray value: 92
+  gray value: 93
+  gray value: 94
+  gray value: 95
+  gray value: 96
+  gray value: 97
+  gray value: 98
+  gray value: 99
+  gray value: 100
+  gray value: 101
+  gray value: 102
+  gray value: 103
+  gray value: 104
+  gray value: 105
+  gray value: 106
+  gray value: 107
+  gray value: 108
+  gray value: 109
+  gray value: 110
+  gray value: 111
+  gray value: 112
+  gray value: 113
+  gray value: 114
+  gray value: 115
+  gray value: 116
+  gray value: 117
+  gray value: 118
+  gray value: 119
+  gray value: 120
+  gray value: 121
+  gray value: 122
+  gray value: 123
+  gray value: 124
+  gray value: 125
+  gray value: 126
+  gray value: 127
+  gray value: 128
+  gray value: 129
+  gray value: 130
+  gray value: 131
+  gray value: 132
+  gray value: 133
+  gray value: 134
+  gray value: 135
+  gray value: 136
+  gray value: 137
+  gray value: 138
+  gray value: 139
+  gray value: 140
+  gray value: 141
+  gray value: 142
+  gray value: 143
+  gray value: 144
+  gray value: 145
+  gray value: 146
+  gray value: 147
+  gray value: 148
+  gray value: 149
+  gray value: 150
+  gray value: 151
+  gray value: 152
+  gray value: 153
+  gray value: 154
+  gray value: 155
+  gray value: 156
+  gray value: 157
+  gray value: 158
+  gray value: 159
+  gray value: 160
+  gray value: 161
+  gray value: 162
+  gray value: 163
+  gray value: 164
+  gray value: 165
+  gray value: 166
+  gray value: 167
+  gray value: 168
+  gray value: 169
+  gray value: 170
+  gray value: 171
+  gray value: 172
+  gray value: 173
+  gray value: 174
+  gray value: 175
+  gray value: 176
+  gray value: 177
+  gray value: 178
+  gray value: 179
+  gray value: 180
+  gray value: 181
+  gray value: 182
+  gray value: 183
+  gray value: 184
+  gray value: 185
+  gray value: 186
+  gray value: 187
+  gray value: 188
+  gray value: 189
+  gray value: 190
+  gray value: 191
+  gray value: 192
+  gray value: 193
+  gray value: 194
+  gray value: 195
+  gray value: 196
+  gray value: 197
+  gray value: 198
+  gray value: 199
+  gray value: 200
+  gray value: 201
+  gray value: 202
+  gray value: 203
+  gray value: 204
+  gray value: 205
+  gray value: 206
+  gray value: 207
+  gray value: 208
+  gray value: 209
+  gray value: 210
+  gray value: 211
+  gray value: 212
+  gray value: 213
+  gray value: 214
+  gray value: 215
+  gray value: 216
+  gray value: 217
+  gray value: 218
+  gray value: 219
+  gray value: 220
+  gray value: 221
+  gray value: 222
+  gray value: 223
+  gray value: 224
+  gray value: 225
+  gray value: 226
+  gray value: 227
+  gray value: 228
+  gray value: 229
+  gray value: 230
+  gray value: 231
+  gray value: 232
+  gray value: 233
+  gray value: 234
+  gray value: 235
+  gray value: 236
+  gray value: 237
+  gray value: 238
+  gray value: 239
+  gray value: 240
+  gray value: 241
+  gray value: 242
+  gray value: 243
+  gray value: 244
+  gray value: 245
+  gray value: 246
+  gray value: 247
+  gray value: 248
+  gray value: 249
+  gray value: 250
+  gray value: 251
+  gray value: 252
+  gray value: 253
+  gray value: 254
+  gray value: 255
+  gray value: 0
+  gray value: 1
+  gray value: 2
+  gray value: 3
+  gray value: 4
+  gray value: 5
+  gray value: 6
+  gray value: 7
+  gray value: 8
+  gray value: 9
+  gray value: 10
+  gray value: 11
+  gray value: 12
+  gray value: 13
+  gray value: 14
+  gray value: 15
+  gray value: 16
+  gray value: 17
+  gray value: 18
+  gray value: 19
+  gray value: 20
+  gray value: 21
+  gray value: 22
+  gray value: 23
+  gray value: 24
+  gray value: 25
+  gray value: 26
+  gray value: 27
+  gray value: 28
+  gray value: 29
+  gray value: 30
+  gray value: 31
+  gray value: 32
+  gray value: 33
+  gray value: 34
+  gray value: 35
+  gray value: 36
+ERROR:root:"Failed to connect to host."
+Traceback (most recent call last):
+  File "C:\Users\mu00129\Desktop\slmnew10\testing_square_pattern.py", line 100, in display_grayscale_patch
+    assert err == HEDSERR_NoError, f"Load error: {err}"
+AssertionError: Load error: 28
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\mu00129\Desktop\slmnew10\testing_square_pattern.py", line 115, in <module>
+    display_grayscale_patch()
