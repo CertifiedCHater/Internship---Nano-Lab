@@ -90,7 +90,6 @@ print(f"Square: x={RECT_X}, y={RECT_Y}, w={RECT_WIDTH}, h={RECT_HEIGHT}\n")
 
 
 def make_slm_image(gray_value):
-    """Black background with square at gray_value."""
     img = np.zeros((slm_height, slm_width), dtype=np.uint8)
     img[RECT_Y : RECT_Y + RECT_HEIGHT,
         RECT_X : RECT_X + RECT_WIDTH] = gray_value
@@ -98,8 +97,10 @@ def make_slm_image(gray_value):
 
 
 def send_to_slm(gray_value):
-    """Send pattern to SLM. Returns True if successful."""
     img = make_slm_image(gray_value)
+    print(f"Array check: background={img[0,0]}, "
+      f"square center={img[RECT_Y + RECT_HEIGHT//2, RECT_X + RECT_WIDTH//2]}, "
+      f"non-zero pixels={np.count_nonzero(img)}")
     err, handle = slm.loadImageData(img)
     if err != HEDSERR_NoError:
         print(f"  SLM load error {err} at gray {gray_value}")
