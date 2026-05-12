@@ -188,3 +188,38 @@ try:
     run_sweep()
 finally:
     cleanup()
+
+
+
+C:\Users\mu00129\AppData\Local\Programs\Python\Python310\python.exe C:\Users\mu00129\Desktop\slmnew10\testing_square_pattern.py 
+PySpin found.
+Discarding 10 warmup frames...
+Camera ready.
+
+SLM size: 1920 x 1200
+Square: x=100, y=100, w=3000, h=3000
+
+Starting sweep: gray 0 to 255
+Output: C:\Users\mu00129\Desktop\slmnew10\capturesCameraSquareNew3
+
+
+Cleaning up...
+Traceback (most recent call last):
+  File "C:\Users\mu00129\Desktop\slmnew10\testing_square_pattern.py", line 186, in <module>
+    run_sweep()
+  File "C:\Users\mu00129\Desktop\slmnew10\testing_square_pattern.py", line 143, in run_sweep
+    ok = send_to_slm(gray_value)
+  File "C:\Users\mu00129\Desktop\slmnew10\testing_square_pattern.py", line 100, in send_to_slm
+    f"square center={img[RECT_Y + RECT_HEIGHT // 2, RECT_X + RECT_WIDTH // 2]}, "
+IndexError: index 1600 is out of bounds for axis 0 with size 1200
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\mu00129\Desktop\slmnew10\testing_square_pattern.py", line 188, in <module>
+    cleanup()
+  File "C:\Users\mu00129\Desktop\slmnew10\testing_square_pattern.py", line 170, in cleanup
+    if USE_CAMERA and camera:
+UnboundLocalError: local variable 'camera' referenced before assignment
+
+Process finished with exit code -1073740791 (0xC0000409)
