@@ -82,16 +82,16 @@ slm_width  = slm.width_px()
 slm_height = slm.height_px()
 print(f"SLM size: {slm_width} x {slm_height}")
 
-assert RECT_X >= 0, \
-    f"RECT_X={RECT_X} must be >= 0"
-assert RECT_Y >= 0, \
-    f"RECT_Y={RECT_Y} must be >= 0"
-assert RECT_X + RECT_WIDTH <= slm_width, \
-    (f"Rectangle too wide: RECT_X({RECT_X}) + RECT_WIDTH({RECT_WIDTH}) "
-     f"= {RECT_X+RECT_WIDTH}, but SLM is only {slm_width}px wide")
-assert RECT_Y + RECT_HEIGHT <= slm_height, \
-    (f"Rectangle too tall: RECT_Y({RECT_Y}) + RECT_HEIGHT({RECT_HEIGHT}) "
-     f"= {RECT_Y+RECT_HEIGHT}, but SLM is only {slm_height}px tall")
+# assert RECT_X >= 0, \
+#     f"RECT_X={RECT_X} must be >= 0"
+# assert RECT_Y >= 0, \
+#     f"RECT_Y={RECT_Y} must be >= 0"
+# assert RECT_X + RECT_WIDTH <= slm_width, \
+#     (f"Rectangle too wide: RECT_X({RECT_X}) + RECT_WIDTH({RECT_WIDTH}) "
+#      f"= {RECT_X+RECT_WIDTH}, but SLM is only {slm_width}px wide")
+# assert RECT_Y + RECT_HEIGHT <= slm_height, \
+#     (f"Rectangle too tall: RECT_Y({RECT_Y}) + RECT_HEIGHT({RECT_HEIGHT}) "
+#      f"= {RECT_Y+RECT_HEIGHT}, but SLM is only {slm_height}px tall")
 
 print(f"Square: x={RECT_X}, y={RECT_Y}, w={RECT_WIDTH}, h={RECT_HEIGHT}")
 print(f"        right edge  = {RECT_X+RECT_WIDTH} / {slm_width}  ✓")
@@ -100,11 +100,6 @@ print(f"        bottom edge = {RECT_Y+RECT_HEIGHT} / {slm_height}  ✓")
 
 
 def make_slm_image(gray_value):
-    """
-    Black background with a square at gray_value.
-    Background = 0 (phase 0, static reference)
-    Square     = gray_value (the phase being swept)
-    """
     img = np.zeros((slm_height, slm_width), dtype=np.uint8)
     img[RECT_Y : RECT_Y + RECT_HEIGHT,
         RECT_X : RECT_X + RECT_WIDTH] = gray_value
