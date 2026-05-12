@@ -9,16 +9,16 @@ from PIL import Image
 OUTPUT_DIR       = r"C:\Users\mu00129\Desktop\slmnew10\capturesCameraSquareNew3"
 HOLOEYE_SDK_PATH = r"C:\Program Files\HOLOEYE Photonics\SLM Display SDK (Python) v4.0.0\examples"
 
-RECT_X      = 810    # (1920 - 300) // 2  = 810
-RECT_Y      = 450    # (1200 - 300) // 2  = 450
-RECT_WIDTH  = 300
-RECT_HEIGHT = 300
+RECT_X      = 810    
+RECT_Y      = 450    
+RECT_WIDTH  = 200
+RECT_HEIGHT = 200
 
-# --- Timing ---
-SETTLE_TIME   = 0.15   # seconds to wait after each SLM update
-WARMUP_FRAMES = 10     # camera warmup frames to discard
 
-# --- Camera ---
+SETTLE_TIME   = 0.15  
+WARMUP_FRAMES = 10     
+
+
 EXPOSURE_US = 85.0
 
 
