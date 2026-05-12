@@ -47,21 +47,17 @@ if USE_CAMERA:
         camera.Init()
         nodemap = camera.GetNodeMap()
 
-        # Disable auto exposure
         exp_auto = PySpin.CEnumerationPtr(nodemap.GetNode("ExposureAuto"))
         exp_auto.SetIntValue(exp_auto.GetEntryByName("Off").GetValue())
 
-        # Set manual exposure time
         exp_time = PySpin.CFloatPtr(nodemap.GetNode("ExposureTime"))
         exp_time.SetValue(EXPOSURE_US)
 
-        # Set continuous acquisition
         acq = PySpin.CEnumerationPtr(nodemap.GetNode("AcquisitionMode"))
         acq.SetIntValue(acq.GetEntryByName("Continuous").GetValue())
 
         camera.BeginAcquisition()
 
-        # Discard warmup frames (FLIR Grasshopper quirk)
         print(f"Discarding {WARMUP_FRAMES} warmup frames...")
         for _ in range(WARMUP_FRAMES):
             frm = camera.GetNextImage()
@@ -79,7 +75,7 @@ from hedslib.heds_types import HEDSERR_NoError
 err = HEDS.SDK.Init(4, 0)
 assert err == HEDSERR_NoError, f"SDK init failed: {err}"
 
-slm = HEDS.SLM.Init(0)     # index 0 = first SLM; change to 1 if it picks wrong one
+slm = HEDS.SLM.Init(0)
 assert slm.errorCode() == HEDSERR_NoError, f"SLM init failed: {slm.errorCode()}"
 
 slm_width  = slm.width_px()
