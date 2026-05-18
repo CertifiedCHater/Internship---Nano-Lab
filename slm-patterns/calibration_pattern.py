@@ -8,8 +8,8 @@ from scipy import signal
 from scipy.stats import norm
 
 
-OUTPUT_DIR    = r"C:\path\to\save\captures"   # where to save BMP images
-CALIB_DIR     = OUTPUT_DIR                     # same folder for calibration check
+OUTPUT_DIR    = r"C:\Users\mu00129\Desktop\slmnew10\capturesCameraSquareNew3"
+CALIB_DIR     = OUTPUT_DIR
 
 SLM_WIDTH     = 1920
 SLM_HEIGHT    = 1200
@@ -21,15 +21,13 @@ RECT_COL_START = 700     # left edge of rectangle on SLM (pixels)
 RECT_COL_END   = 1200    # right edge of rectangle on SLM (pixels)
 
 
-CAM_ROW_START   = 600
-CAM_ROW_END     = 1400
-CAM_NOSHIFT_C1  = 200    
-CAM_NOSHIFT_C2  = 650    
-CAM_SHIFT_C1    = 750    
-CAM_SHIFT_C2    = 1100   
-
-
-KC              = 900    
+CAM_ROW_START   = 647
+CAM_ROW_END     = 1456
+CAM_NOSHIFT_C1  = 37
+CAM_NOSHIFT_C2  = 297
+CAM_SHIFT_C1    = 397
+CAM_SHIFT_C2    = 1552
+KC              = 404
 
 
 NUM_GRAY_LEVELS = 256
