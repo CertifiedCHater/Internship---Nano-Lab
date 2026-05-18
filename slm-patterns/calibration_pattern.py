@@ -170,8 +170,7 @@ def run_capture(output_dir=OUTPUT_DIR):
         acq.SetIntValue(acq.GetEntryByName("Continuous").GetValue())
         camera.BeginAcquisition()
 
-        # Discard first 20 frames — camera sends duplicate frames at startup
-        # (see report section 7.1.2 — first 10 frames are identical)
+        # Discard first 10 frames — camera sends duplicate frames at startup
         print("  Warming up camera (discarding first 20 frames)...")
         for _ in range(20):
             img = camera.GetNextImage()
@@ -255,7 +254,7 @@ def run_calibration_check(calib_dir=CALIB_DIR):
             print(f"  WARNING: Phase extraction failed at gray {i:03d}: {e}")
             phase_diffs.append(np.nan)
 
-    # --- Post-processing (same as Jonas) ---
+    # --- Post-processing---
     change = np.array(phase_diffs)
 
     # Unwrap to remove 2π jumps
@@ -288,7 +287,6 @@ def run_calibration_check(calib_dir=CALIB_DIR):
     if missing:
         print(f"  Missing files       : {missing}")
 
-    # --- Plot: replicate figure 17 from report ---
     fig, axes = plt.subplots(1, 2, figsize=(13, 5))
     fig.suptitle("SLM Calibration Check", fontsize=13)
 
