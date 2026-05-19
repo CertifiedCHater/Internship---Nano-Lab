@@ -27,7 +27,7 @@ CAM_NOSHIFT_C1  = 37
 CAM_NOSHIFT_C2  = 297
 CAM_SHIFT_C1    = 397
 CAM_SHIFT_C2    = 1552
-KC              = 404
+KC              = 397
 
 
 NUM_GRAY_LEVELS = 256
