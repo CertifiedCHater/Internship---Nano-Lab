@@ -75,7 +75,7 @@ from hedslib.heds_types import HEDSERR_NoError
 err = HEDS.SDK.Init(4, 0)
 assert err == HEDSERR_NoError, f"SDK init failed: {err}"
 
-slm = HEDS.SLM.Init(0)
+slm = HEDS.SLM.Init("", True, 0.0)
 assert slm.errorCode() == HEDSERR_NoError, f"SLM init failed: {slm.errorCode()}"
 
 slm_width  = slm.width_px()
