@@ -199,10 +199,13 @@ def run_capture(output_dir=OUTPUT_DIR):
     try:
         import HEDS
         from hedslib.heds_types import HEDSERR_NoError
+     
         err = HEDS.SDK.Init(4, 0)
         assert err == HEDSERR_NoError
-        slm = HEDS.SLM.Init()
+     
+        slm = HEDS.SLM.Init("", True, 0.0)
         assert slm.errorCode() == HEDSERR_NoError
+     
         print("  SLM initialized.")
     except Exception as e:
         print(f"  ERROR: SLM init failed: {e}")
