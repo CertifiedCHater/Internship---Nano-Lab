@@ -22,13 +22,16 @@ RECT_COL_START = 810   # (1920 - 300) // 2
 RECT_COL_END   = 1110  # RECT_COL_START + 300
 
 
-CAM_ROW_START  = 447
-CAM_ROW_END    = 1498
-CAM_NOSHIFT_C1 = 155
-CAM_NOSHIFT_C2 = 246
-CAM_SHIFT_C1   = 346
-CAM_SHIFT_C2   = 1237
-KC             = 525
+CAM_ROW_START  = 500
+CAM_ROW_END    = 1400
+
+CAM_NOSHIFT_C1 = 1300
+CAM_NOSHIFT_C2 = 1600
+
+CAM_SHIFT_C1   = 400
+CAM_SHIFT_C2   = 900
+
+KC             = 450
 
 
 NUM_GRAY_LEVELS   = 256
@@ -304,7 +307,8 @@ def run_calibration_check(calib_dir=CALIB_DIR):
 
     # Ideal 0 to 2 (= 0 to 2π in units of π)
     gray_axis = np.array(list(gray_range))
-    ideal     = np.linspace(0, 2, len(gray_range))
+    PLUTO_PHASE_RANGE_PI = 6.0
+    ideal = np.linspace(0, PLUTO_PHASE_RANGE_PI, len(gray_range))
     deviation = change_pi - ideal
     max_dev   = np.nanmax(np.abs(deviation))
 
@@ -341,7 +345,6 @@ def run_calibration_check(calib_dir=CALIB_DIR):
     print(f"\n  Plot saved to: {out_path}")
 
     return change_pi, deviation, max_dev
-
 
 
 def show_figure(image_path_ref, image_path_shifted=None):
