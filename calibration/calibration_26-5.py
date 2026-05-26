@@ -127,3 +127,10 @@ axes[1].legend()
 plt.tight_layout()
 plt.savefig("linearity_result.png", dpi=150)
 plt.show()
+
+
+
+# Slope:               0.00040 π per gray level
+# Full range (0→255):  0.101π
+# Phase range gray 0-150: 0.4279π
+#   → Rising throughout — no dead zone
