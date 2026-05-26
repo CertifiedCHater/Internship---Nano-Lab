@@ -183,7 +183,7 @@ def run_capture(output_dir=OUTPUT_DIR):
 
         # Discard first 10 frames — camera sends duplicate frames at startup
         print("  Warming up camera (discarding first 20 frames)...")
-        for _ in range(20):
+        for _ in range(10):
             img = camera.GetNextImage()
             img.Release()
         print("  Camera ready.")
