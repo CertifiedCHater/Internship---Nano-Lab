@@ -80,12 +80,28 @@ change -= change[np.where(valid)[0][0]]
 if change[np.where(valid)[0][-1]] < 0:
     change = -change
 change_pi = change / np.pi
-
-
 gray_axis = np.arange(256)
-ideal     = np.linspace(0, 2, 256)   # 0 to 2π in units of π
+
+
+valid_gv  = gray_axis[valid]
+valid_phi = change_pi[valid]
+coeffs    = np.polyfit(valid_gv, valid_phi, 1)
+ideal     = np.polyval(coeffs, gray_axis)
 deviation = change_pi - ideal
 max_dev   = np.nanmax(np.abs(deviation))
+
+slope = coeffs[0]
+print(f"Slope:               {slope:.5f} π per gray level")
+print(f"Full range (0→255):  {slope * 255:.3f}π")
+
+flat_range = change_pi[valid][valid_gv < 150].max() - change_pi[valid][valid_gv < 150].min()
+print(f"Phase range gray 0-150: {flat_range:.4f}π")
+if flat_range < 0.1:
+    print("  → FLAT dead zone — calibration file mismatch likely")
+    print("  → Try adding slm.setWavelength(633.0) after SLM init")
+else:
+    print(f"  → Rising throughout — no dead zone")
+
 print(f"\nMax deviation from ideal: {max_dev:.4f}π")
 print(f"Status: {'PASS ✓' if max_dev < 0.1 else 'FAIL ✗'}")
 
