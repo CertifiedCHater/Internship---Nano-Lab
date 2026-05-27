@@ -317,7 +317,7 @@ def run_calibration_check(calib_dir=CALIB_DIR):
 
     valid_gv = np.array(list(gray_range))[~np.isnan(change)]
     valid_phi = change_pi[~np.isnan(change_pi)]
-    coeffs = np.polyfit(valid_phi, valid_gv, 1)
+    coeffs = np.polyfit(valid_gv, valid_phi, 1)
     ideal = np.polyval(coeffs, np.array(list(gray_range)))
     deviation = change_pi - ideal
     max_dev   = np.nanmax(np.abs(deviation))
