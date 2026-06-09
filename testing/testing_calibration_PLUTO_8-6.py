@@ -21,13 +21,16 @@ RECT_COL_START = 810
 RECT_COL_END   = 1110
 
 
-CAM_ROW_START  = 447
-CAM_ROW_END    = 1540
-CAM_NOSHIFT_C1 = 400
-CAM_NOSHIFT_C2 = 900
-CAM_SHIFT_C1   = 1300
-CAM_SHIFT_C2   = 1600
-KC             = 546
+CAM_ROW_START  = 266
+CAM_ROW_END    = 1130
+
+CAM_NOSHIFT_C1 = 33
+CAM_NOSHIFT_C2 = 449
+
+CAM_SHIFT_C1   = 549
+CAM_SHIFT_C2   = 1310
+
+KC             = 432
 
 
 NUM_GRAY_LEVELS   = 256
@@ -245,34 +248,34 @@ def run_capture(output_dir = OUTPUT_DIR):
 
 
 
-  for gray_val in range(NUM_GRAY_LEVELS):
+    for gray_val in range(NUM_GRAY_LEVELS):
 
-    ok = send_to_slm(gray_val, slm, HEDSERR_NoError)
-    if not ok:
-        failed.append(gray_val)
-        continue
+        ok = send_to_slm(gray_val, slm, HEDSERR_NoError)
+        if not ok:
+            failed.append(gray_val)
+            continue
 
-    time.sleep(SETTLE_TIME)
+        time.sleep(SETTLE_TIME)
 
     # Flush stale frames
-    for _ in range(2):
-        stale = camera.GetNextImage()
-        stale.Release()
+        for _ in range(2):
+            stale = camera.GetNextImage()
+            stale.Release()
 
     # Capture clean frame
-    try:
-        raw = camera.GetNextImage()
-        if not raw.IsIncomplete():
-            frame    = raw.GetNDArray().astype(np.uint8)
-            filename = f"{CALIB_PREFIX}{gray_val:03d}{CALIB_SUFFIX}"
-            Image.fromarray(frame).save(os.path.join(output_dir, filename))
-        raw.Release()
-    except Exception as e:
-        print(f"  WARNING: Capture failed at gray {gray_val}: {e}")
-        failed.append(gray_val)
+        try:
+            raw = camera.GetNextImage()
+            if not raw.IsIncomplete():
+                frame    = raw.GetNDArray().astype(np.uint8)
+                filename = f"{CALIB_PREFIX}{gray_val:03d}{CALIB_SUFFIX}"
+                Image.fromarray(frame).save(os.path.join(output_dir, filename))
+            raw.Release()
+        except Exception as e:
+            print(f"  WARNING: Capture failed at gray {gray_val}: {e}")
+            failed.append(gray_val)
 
-    if gray_val % 32 == 0 or gray_val == 255:
-        print(f"  [{gray_val:3d}/255] done")
+        if gray_val % 32 == 0 or gray_val == 255:
+            print(f"  [{gray_val:3d}/255] done")
 
     try:
         camera.EndAcquisition()
