@@ -17,8 +17,8 @@ SLM_HEIGHT = 1200
 
 RECT_ROW_START = 450
 RECT_ROW_END   = 750
-RECT_COL_START = 810
-RECT_COL_END   = 1110
+RECT_COL_START = 1400
+RECT_COL_END   = 1700
 
 
 CAM_ROW_START  = 266
@@ -49,11 +49,11 @@ EXPOSURE_US      = 85.0
 
 TEMP_BMP = os.path.join(OUTPUT_DIR, "_temp_pattern.bmp")
 
-# def build_slm_pattern(gray_val):
-#     img = np.zeros((SLM_HEIGHT, SLM_WIDTH), dtype=np.uint8)
-#     img[RECT_ROW_START:RECT_ROW_END,
-#         RECT_COL_START:RECT_COL_END] = gray_val
-#     return img
+def build_slm_pattern(gray_val):
+    img = np.zeros((SLM_HEIGHT, SLM_WIDTH), dtype=np.uint8)
+    img[RECT_ROW_START:RECT_ROW_END,
+        RECT_COL_START:RECT_COL_END] = gray_val
+    return img
 
 def send_to_slm(gray_val, slm, HEDSERR_NoError):
     # Build grayscale pattern — same as before
@@ -258,7 +258,7 @@ def run_capture(output_dir = OUTPUT_DIR):
         time.sleep(SETTLE_TIME)
 
     # Flush stale frames
-        for _ in range(2):
+        for _ in range(3):
             stale = camera.GetNextImage()
             stale.Release()
 
