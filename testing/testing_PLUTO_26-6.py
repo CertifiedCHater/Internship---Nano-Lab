@@ -246,3 +246,28 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+C:\Users\mu00129\AppData\Local\Programs\Python\Python310\python.exe C:\Users\mu00129\Desktop\slmnew10\testing_PLUTO_26-6.py 
+  SLM reports 1920 x 1200 px
+  ** WARNING: SDK size 1920x1200 != your CONFIG 1920x1080.
+     Either you're addressing the wrong SLM (ERIS instead of Pluto),
+     or SLM_WIDTH/SLM_HEIGHT need correcting. Fix before trusting results.
+  capturing gray levels [0, 64, 128, 192, 255] ...
+    gray   0 -> saved
+    gray  64 -> saved
+    gray 128 -> saved
+    gray 192 -> saved
+    gray 255 -> saved
+Traceback (most recent call last):
+  File "C:\Users\mu00129\Desktop\slmnew10\testing_PLUTO_26-6.py", line 248, in <module>
+    main()
+  File "C:\Users\mu00129\Desktop\slmnew10\testing_PLUTO_26-6.py", line 244, in main
+    mode_capture(args.dir)
+  File "C:\Users\mu00129\Desktop\slmnew10\testing_PLUTO_26-6.py", line 155, in mode_capture
+    slm.close(); HEDS.SDK.Close()
+AttributeError: 'SLM' object has no attribute 'close'
+
+Process finished with exit code -1073740791 (0xC0000409)
