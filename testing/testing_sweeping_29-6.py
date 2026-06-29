@@ -179,10 +179,12 @@ def main():
     ap.add_argument("--analyze", action="store_true")
     ap.add_argument("--dir", default=OUTPUT_DIR)
     a = ap.parse_args()
-if   mode == "pluto-ref": cap_pluto_ref(a.dir)
-    elif mode == "sweep":     cap_sweep(a.dir)
-    elif mode == "analyze":   analyze(a.dir)
-    else: print('Set MODE at the top to "pluto-ref", "sweep", or "analyze".')
+    mode = ("pluto-ref" if a.pluto_ref else "sweep" if a.sweep
+            else "analyze" if a.analyze else MODE)
+    if   mode == "pluto-ref": cap_pluto_ref(a.dir)
+        elif mode == "sweep":     cap_sweep(a.dir)
+        elif mode == "analyze":   analyze(a.dir)
+        else: print('Set MODE at the top to "pluto-ref", "sweep", or "analyze".')
 
 
 if __name__ == "__main__":
