@@ -3,6 +3,7 @@ import argparse, glob, os, sys, time
 import numpy as np
 from PIL import Image
 
+MODE = "pluto-ref"
 
 OUTPUT_DIR = r"C:\Users\mu00129\Desktop\slmnew10\Measurements2\overlap"
 SLM_WIDTH, SLM_HEIGHT = 1920, 1200      
@@ -178,10 +179,10 @@ def main():
     ap.add_argument("--analyze", action="store_true")
     ap.add_argument("--dir", default=OUTPUT_DIR)
     a = ap.parse_args()
-    if a.pluto_ref: cap_pluto_ref(a.dir)
-    elif a.sweep:   cap_sweep(a.dir)
-    elif a.analyze: analyze(a.dir)
-    else:           print("pick one: --pluto-ref | --sweep | --analyze")
+if   mode == "pluto-ref": cap_pluto_ref(a.dir)
+    elif mode == "sweep":     cap_sweep(a.dir)
+    elif mode == "analyze":   analyze(a.dir)
+    else: print('Set MODE at the top to "pluto-ref", "sweep", or "analyze".')
 
 
 if __name__ == "__main__":
