@@ -189,9 +189,3 @@ if __name__ == "__main__":
 
 
 
-
-
-C:\Users\mu00129\AppData\Local\Programs\Python\Python310\python.exe C:\Users\mu00129\Desktop\slmnew10\sweeping_29-6.py 
-pick one: --pluto-ref | --sweep | --analyze
-
-Process finished with exit code 0
