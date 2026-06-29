@@ -3,6 +3,7 @@ import argparse, glob, os, sys, time
 import numpy as np
 from PIL import Image
 
+
 MODE = "pluto-ref"
 
 OUTPUT_DIR = r"C:\Users\mu00129\Desktop\slmnew10\Measurements2\overlap"
@@ -14,9 +15,8 @@ SQUARE_GRAY = 255
 HOLOEYE_SDK_PATH = r"C:\Program Files\HOLOEYE Photonics\SLM Display SDK (Python) v4.0.0\examples"
 LASER_WAVELENGTH = 633.0
 SETTLE_TIME, FLUSH_FRAMES, WARMUP_FRAMES, EXPOSURE_US = 1.0, 5, 20, 85.0
-USE_PHASE_DATA = False                  
+USE_PHASE_DATA = False                  # ERIS works well with image-data
 TEMP_BMP = os.path.join(OUTPUT_DIR, "_tmp.bmp")
-
 
 
 def _init_slm():
@@ -115,6 +115,7 @@ def _cleanup(HEDS, PySpin, system, cams, cam):
         os.remove(TEMP_BMP)
 
 
+
 def _load(p):
     return np.asarray(Image.open(p).convert("L"), float)
 
@@ -133,6 +134,7 @@ def analyze(out=OUTPUT_DIR):
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
+    # PLUTO footprint
     p_on, p_off = os.path.join(out, "pluto_on.bmp"), os.path.join(out, "pluto_off.bmp")
     if not (os.path.exists(p_on) and os.path.exists(p_off)):
         print("  missing pluto_on/off.bmp — run --pluto-ref first."); return
@@ -161,6 +163,7 @@ def analyze(out=OUTPUT_DIR):
     print(f"  its center on camera          : ({ecx:.0f}, {ecy:.0f})")
     print(f"  centroid distance             : {dist:.0f} px  (smaller = better aligned)")
 
+    # overlay figure
     eris_best = _load(fpath); _, _, emask = _footprint(eris_best - bg)
     rgb = np.stack([_load(p_on)] * 3, -1); rgb = rgb / rgb.max()
     rgb[pmask] = [1, 0, 0]          # PLUTO footprint in red
@@ -179,16 +182,14 @@ def main():
     ap.add_argument("--analyze", action="store_true")
     ap.add_argument("--dir", default=OUTPUT_DIR)
     a = ap.parse_args()
+    # command-line flag wins; otherwise fall back to the MODE set at the top
     mode = ("pluto-ref" if a.pluto_ref else "sweep" if a.sweep
             else "analyze" if a.analyze else MODE)
     if   mode == "pluto-ref": cap_pluto_ref(a.dir)
-        elif mode == "sweep":     cap_sweep(a.dir)
-        elif mode == "analyze":   analyze(a.dir)
-        else: print('Set MODE at the top to "pluto-ref", "sweep", or "analyze".')
+    elif mode == "sweep":     cap_sweep(a.dir)
+    elif mode == "analyze":   analyze(a.dir)
+    else: print('Set MODE at the top to "pluto-ref", "sweep", or "analyze".')
 
 
 if __name__ == "__main__":
     main()
-
-
-
