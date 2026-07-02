@@ -11,7 +11,6 @@ SLM_WIDTH, SLM_HEIGHT = 1920, 1200
 RECT_ROW_START, RECT_ROW_END = 400, 680
 RECT_COL_START, RECT_COL_END = 150, 450     # square inside the beam footprint
 
-
 CAM_ROW_START, CAM_ROW_END   = 266, 1130
 CAM_NOSHIFT_C1, CAM_NOSHIFT_C2 = 33, 449
 CAM_SHIFT_C1, CAM_SHIFT_C2     = 549, 1310
@@ -22,9 +21,10 @@ LASER_WAVELENGTH = 633.0
 USE_PHASE_DATA   = True
 EXPOSURE_US      = 85.0
 WARMUP_FRAMES    = 20
-SETTLE_TIME      = 1.0        
+SETTLE_TIME      = 1.0        # per pattern; live mode can be snappier
 FLUSH_FRAMES     = 3
-SWEEP_GRAYS      = list(range(0, 256, 17))   # ~16 points for the curve
+SWEEP_GRAYS      = list(range(0, 256, 4))    # dense sampling so unwrapping works
+                                             # (use range(0,256) for the real calibration)
 TARGET_PI        = 2.0       # calibration needs the depth to reach this
 TEMP_BMP = os.path.join(DIR, "_tmp.bmp")
 
@@ -126,6 +126,7 @@ def cleanup(HEDS, PySpin, system, cams, cam):
     if os.path.exists(TEMP_BMP): os.remove(TEMP_BMP)
 
 
+# ---- modes ----------------------------------------------------------------- #
 def mode_live():
     os.makedirs(DIR, exist_ok=True)
     HEDS, NE, slm = init_slm()
@@ -175,11 +176,16 @@ def mode_analyze():
 
 def report(frames: dict):
     grays = sorted(frames)
-    phis = []
+    raw = []                                  # per-frame phase in RADIANS
     for g in grays:
-        try: phis.append(phase_of(frames[g]) / np.pi)
-        except Exception: phis.append(np.nan)
-    phis = np.array(phis)
+        try: raw.append(phase_of(frames[g]))
+        except Exception: raw.append(np.nan)
+    raw = np.array(raw)
+    valid = ~np.isnan(raw)
+    # UNWRAP across the sweep (Jonas's step) — stitches the pi-ambiguity jumps
+    # into a continuous curve. Needs dense sampling to work (see SWEEP_GRAYS).
+    phis = np.full(raw.shape, np.nan)
+    phis[valid] = np.unwrap(raw[valid], period=np.pi) / np.pi
     phis = phis - np.nanmin(phis)            # start at 0 for readability
     depth = np.nanmax(phis) - np.nanmin(phis)
     print("\n--- modulation depth ---")
