@@ -142,27 +142,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-
-import sys
-sys.path.append(r"C:\Program Files\HOLOEYE Photonics\SLM Display SDK (Python) v4.0.0\examples")
-import HEDS
-from hedslib.heds_types import HEDSERR_NoError
-
-HEDS.SDK.Init(4, 0)
-
-# 1) Show what the SDK exposes — look here for a Detect/ListDevices/enumerate call
-print("HEDS.SDK members:", [x for x in dir(HEDS.SDK) if not x.startswith("_")])
-print("HEDS.SLM members:", [x for x in dir(HEDS.SLM) if not x.startswith("_")])
-
-# 2) Try opening by index and report each device (False = no preview window)
-for idx in ("0", "1", "2"):
-    try:
-        slm = HEDS.SLM.Init(idx, False, 0.0)
-        if slm.errorCode() == HEDSERR_NoError:
-            print(f"  index {idx}:  {slm.width_px()} x {slm.height_px()} px  -> usable selector: \"{idx}\"")
-        else:
-            print(f"  index {idx}:  no device (error {slm.errorCode()})")
-    except Exception as e:
-        print(f"  index {idx}:  {e}")
-
-HEDS.SDK.Close()
